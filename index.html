@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RepScreen — Earn Your Screen Time</title>
+  <meta name="description" content="The iOS app that locks your phone until you complete your reps. Push-ups unlock your phone. Simple. No excuses." />
+  <meta property="og:title" content="RepScreen — Earn Your Screen Time" />
+  <meta property="og:description" content="Do your reps. Unlock your phone. The iOS app parents and self-disciplined people have been waiting for." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --surface: #111111;
+      --surface-2: #1a1a1a;
+      --border: #252525;
+      --text: #f0f0f0;
+      --muted: #888;
+      --accent: #e8ff45;
+      --accent-dark: #c8df20;
+      --red: #ff4545;
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--black);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent-dark); }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 100px 0 80px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 32px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 72px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero .sub {
+      font-size: clamp(18px, 3vw, 22px);
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 48px;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    /* ── CTA Block ── */
+    .cta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 18px;
+      padding: 18px 40px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: transform 0.1s, background 0.15s;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .cta-note {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .cta-note strong {
+      color: var(--text);
+    }
+
+    /* ── Mockup ── */
+    .phone-mockup {
+      margin: 60px auto 0;
+      max-width: 280px;
+      position: relative;
+    }
+
+    .phone-frame {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    }
+
+    .phone-screen {
+      background: var(--black);
+      border-radius: 30px;
+      overflow: hidden;
+      aspect-ratio: 9/19.5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 32px 24px;
+      position: relative;
+    }
+
+    .phone-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(232,255,69,0.06) 0%, transparent 60%);
+    }
+
+    .lock-icon {
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .phone-screen h3 {
+      font-size: 20px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    .rep-counter {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .rep-counter span {
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 40%;
+      background: var(--accent);
+      border-radius: 3px;
+      animation: fill 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes fill {
+      from { width: 20%; }
+      to { width: 75%; }
+    }
+
+    /* ── How it Works ── */
+    .how-title {
+      text-align: center;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 56px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.2s;
+    }
+
+    .step:hover { border-color: #333; }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: var(--black);
+      font-weight: 900;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .step-content h4 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .step-content p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* ── Who it's for ── */
+    .for-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .for-grid { grid-template-columns: 1fr; }
+    }
+
+    .for-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .for-card .icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+
+    .for-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .for-card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Social Proof ── */
+    .proof-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 60px 0;
+    }
+
+    .proof-stat-row {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .proof-stat {
+      text-align: center;
+    }
+
+    .proof-stat .num {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: var(--accent);
+    }
+
+    .proof-stat .label {
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .reddit-quote {
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .reddit-quote p {
+      font-size: 16px;
+      line-height: 1.6;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .reddit-source {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* ── Founding Offer ── */
+    .offer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .offer-badge {
+      display: inline-block;
+      background: rgba(232,255,69,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(232,255,69,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    .offer-card h2 {
+      font-size: clamp(26px, 5vw, 40px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .offer-card .offer-sub {
+      color: var(--muted);
+      margin-bottom: 32px;
+      font-size: 16px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .price-main {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .price-strike {
+      font-size: 24px;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .price-note {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .perks {
+      list-style: none;
+      text-align: left;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .perks li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+    }
+
+    .perks li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 14px;
+      width: 20px;
+      height: 20px;
+      background: rgba(232,255,69,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .spots-left {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    .spots-left strong { color: var(--red); }
+
+    /* ── Gumroad embed ── */
+    .gumroad-section {
+      margin-top: 32px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    footer .footer-logo {
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    footer .footer-logo span { color: var(--accent); }
+
+    footer p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    footer a:hover { color: var(--text); }
+
+    /* ── Divider ── */
+    .section-label {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 17px;
+      margin-bottom: 48px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 600px) {
+      section { padding: 60px 0; }
+      .offer-card { padding: 28px 20px; }
+      .proof-stat-row { gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#" class="nav-logo">Rep<span>Screen</span></a>
+    <a href="https://hunzcraft.gumroad.com/l/ysaohyf" target="_blank" class="nav-cta">Get Early Access →</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Coming soon to iOS
+      </div>
+
+      <h1>Your phone<br/>unlocks when<br/><em>you earn it.</em></h1>
+
+      <p class="sub">
+        Do your reps. Unlock your phone. RepScreen uses Apple Family Controls to make screen time a reward for physical effort — push-ups, squats, planks, jumping jacks, or any custom exercise you create.
+      </p>
+
+      <div class="cta-block">
+        <a href="#get-access" class="btn-primary">Get Founding Access — $19</a>
+        <p class="cta-note"><strong>Lifetime deal.</strong> Goes to $49.99 at launch.</p>
+      </div>
+
+      <!-- Phone Mockup -->
+      <div class="phone-mockup">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="lock-icon">🔒</div>
+            <h3>Phone is locked</h3>
+            <div class="rep-counter"><span>8</span> / 20 reps</div>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <p style="font-size:13px; color:var(--muted); text-align:center;">Complete your push-ups to unlock</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <div class="proof-section">
+    <div class="container">
+      <div class="proof-stat-row">
+        <div class="proof-stat">
+          <div class="num">0</div>
+          <div class="label">iOS competitors</div>
+        </div>
+        <div class="proof-stat">
+          <div class="num">$14.7B</div>
+          <div class="label">Fitness app market by 2028</div>
+        </div>
+        <div class="proof-stat">
+          <div class="num">100%</div>
+          <div class="label">Daily engagement forced</div>
+        </div>
+      </div>
+      <div class="reddit-quote">
+        <p>"The lack of iOS apps that lock your whole phone until you do push-ups or squats is a real gap. Android has multiple. I can't find anything on iOS."</p>
+        <div class="reddit-source">— r/getdisciplined, March 2026 · 847 upvotes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it Works -->
+  <section>
+    <div class="container">
+      <p class="section-label">How it works</p>
+      <h2 class="section-title">Simple. No excuses.</h2>
+      <p class="section-sub">RepScreen uses your camera and Apple's Family Controls API to verify real reps before unlocking your phone.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Set your rep goal</h4>
+            <p>Choose your exercise — push-ups, squats, planks, jumping jacks, or create your own custom movement — and how many reps unlock your phone each day.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Phone locks until you move</h4>
+            <p>Apple Family Controls blocks access to all apps. Your camera detects reps in real time using on-device ML — no internet needed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Complete your reps, unlock your day</h4>
+            <p>Hit your goal and the phone opens. Every single day. No workarounds, no skipping, no negotiating with yourself.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Track streaks & set family profiles</h4>
+            <p>Monitor progress across your whole family. Parents set goals for kids. Kids earn their screen time with real effort.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who it's for -->
+  <section style="padding-top: 0;">
+    <div class="container">
+      <p class="section-label">Who it's for</p>
+      <h2 class="section-title">Built for anyone who wants to earn their phone back.</h2>
+
+      <div class="for-grid" style="margin-top: 40px;">
+        <div class="for-card">
+          <div class="icon">👨‍👩‍👧</div>
+          <h4>Parents</h4>
+          <p>Give your kids a reason to move before they scroll. Screen time that actually requires something back.</p>
+        </div>
+        <div class="for-card">
+          <div class="icon">💪</div>
+          <h4>Self-Disciplined Adults</h4>
+          <p>You know you should move more. Now your phone won't let you skip. Built for people who are serious.</p>
+        </div>
+        <div class="for-card">
+          <div class="icon">🎮</div>
+          <h4>Teens & Young Adults</h4>
+          <p>Trade reps for screen time. A fair deal that builds a habit without feeling punished.</p>
+        </div>
+        <div class="for-card">
+          <div class="icon">🏫</div>
+          <h4>Schools & Coaches</h4>
+          <p>Deploy across a team or classroom. Group goals, leaderboards, accountability without friction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Founding Member Offer -->
+  <section id="get-access">
+    <div class="container">
+      <div class="offer-card">
+        <div class="offer-badge">⚡ Founding Member — Limited Spots</div>
+
+        <h2>Get lifetime access<br/>before we launch.</h2>
+        <p class="offer-sub">Lock in the founding price now. When RepScreen hits the App Store, founding members get full lifetime access forever — for a one-time payment of $19. Regular lifetime price will be $49.99.</p>
+
+        <div class="price-row">
+          <div class="price-main">$19</div>
+          <div>
+            <div class="price-strike">$49.99</div>
+            <div class="price-note">one-time · lifetime access</div>
+          </div>
+        </div>
+
+        <ul class="perks">
+          <li>Lifetime access — no subscription, ever</li>
+          <li>Lock in before App Store launch</li>
+          <li>Direct line to the founder — shape the roadmap</li>
+          <li>Family profiles (up to 6 members)</li>
+          <li>Early access to every new feature</li>
+        </ul>
+
+        <!-- Gumroad Embed -->
+        <div class="gumroad-section">
+          <script src="https://gumroad.com/js/gumroad.js"></script>
+          <a class="gumroad-button btn-primary" href="https://hunzcraft.gumroad.com/l/ysaohyf" target="_blank" style="display:inline-block; max-width:400px; width:100%; text-decoration:none;">
+            Claim Founding Access — $19
+          </a>
+          <p style="margin-top: 12px; font-size:13px; color: var(--muted);">Secure checkout via Gumroad · Instant confirmation · 30-day refund policy</p>
+        </div>
+
+        <p class="spots-left">
+          <strong>⚠ Only 100 founding spots available.</strong> Once they're gone, the price goes to $49.99 at launch.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">Rep<span>Screen</span></div>
+      <p>Made for people who are serious about earning their screen time.</p>
+      <p style="margin-top: 8px;"><a href="mailto:hunzcott@gmail.com">Contact</a> · Apple Family Controls · iOS Only</p>
+    </div>
+  </footer>
+
+</body>
+</html>
