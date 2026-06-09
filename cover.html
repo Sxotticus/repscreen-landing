@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: #0a0a0a;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .canvas {
+      width: 1280px;
+      height: 720px;
+      background: #0a0a0a;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 80px 0 100px;
+      overflow: hidden;
+    }
+
+    /* Background glow */
+    .canvas::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: -100px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(ellipse, rgba(232,255,69,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .canvas::after {
+      content: '';
+      position: absolute;
+      bottom: -200px;
+      right: 200px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(232,255,69,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Grid lines subtle */
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    /* Left content */
+    .left {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 620px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(232,255,69,0.1);
+      border: 1px solid rgba(232,255,69,0.25);
+      border-radius: 100px;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #e8ff45;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 28px;
+      width: fit-content;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #e8ff45;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: #888;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .logo span { color: #e8ff45; }
+
+    h1 {
+      font-size: 76px;
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -3px;
+      color: #f0f0f0;
+      margin-bottom: 24px;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: #e8ff45;
+    }
+
+    .tagline {
+      font-size: 22px;
+      color: #888;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 40px;
+      max-width: 480px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .price-badge {
+      background: #e8ff45;
+      color: #0a0a0a;
+      font-size: 28px;
+      font-weight: 900;
+      padding: 12px 28px;
+      border-radius: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .price-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .price-strike {
+      font-size: 16px;
+      color: #555;
+      text-decoration: line-through;
+      font-weight: 600;
+    }
+
+    .price-note {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* Right — Phone mockup */
+    .right {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .phone {
+      width: 220px;
+      background: #111;
+      border: 2px solid #222;
+      border-radius: 36px;
+      padding: 10px;
+      box-shadow:
+        0 0 0 1px #1a1a1a,
+        0 40px 80px rgba(0,0,0,0.8),
+        0 0 60px rgba(232,255,69,0.08);
+    }
+
+    .screen {
+      background: #0a0a0a;
+      border-radius: 28px;
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      min-height: 420px;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screen::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #e8ff45, transparent);
+      opacity: 0.5;
+    }
+
+    .lock {
+      font-size: 44px;
+      line-height: 1;
+    }
+
+    .screen-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #f0f0f0;
+      text-align: center;
+      letter-spacing: -0.3px;
+    }
+
+    .counter {
+      background: #1a1a1a;
+      border: 1px solid #252525;
+      border-radius: 100px;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #888;
+    }
+
+    .counter span {
+      color: #e8ff45;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .bar-wrap {
+      width: 100%;
+      height: 5px;
+      background: #1a1a1a;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 40%;
+      background: #e8ff45;
+      border-radius: 3px;
+    }
+
+    .screen-sub {
+      font-size: 12px;
+      color: #555;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* iOS label */
+    .ios-label {
+      position: absolute;
+      bottom: 36px;
+      right: 80px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #444;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .ios-label::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="grid"></div>
+
+    <div class="left">
+      <div class="badge">
+        <span class="dot"></span>
+        Founding Member — Limited
+      </div>
+      <div class="logo">Rep<span>Screen</span></div>
+      <h1>Earn your<br/><em>screen time.</em></h1>
+      <p class="tagline">Do your reps. Unlock your phone.<br/>Push-ups, squats, or any custom exercise.</p>
+      <div class="price-row">
+        <div class="price-badge">$19</div>
+        <div class="price-meta">
+          <span class="price-strike">$49.99 at launch</span>
+          <span class="price-note">Lifetime access · First 100 only</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="phone">
+        <div class="screen">
+          <div class="lock">🔒</div>
+          <div class="screen-title">Phone is locked</div>
+          <div class="counter"><span>8</span> / 20 reps</div>
+          <div class="bar-wrap">
+            <div class="bar-fill"></div>
+          </div>
+          <div class="screen-sub">Complete your push-ups<br/>to unlock your phone</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ios-label">iOS · Apple Family Controls</div>
+  </div>
+</body>
+</html>
