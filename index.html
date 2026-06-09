@@ -14,14 +14,14 @@
 
   <style>
     :root {
-      --black: #0a0a0a;
-      --surface: #111111;
-      --surface-2: #1a1a1a;
-      --border: #252525;
+      --black: #0d0a1a;
+      --surface: #13102a;
+      --surface-2: #1c1838;
+      --border: #2a2550;
       --text: #f0f0f0;
-      --muted: #888;
-      --accent: #e8ff45;
-      --accent-dark: #c8df20;
+      --muted: #9b96b8;
+      --accent: #ff7b2c;
+      --accent-dark: #e06520;
       --red: #ff4545;
       --radius: 12px;
     }
@@ -31,7 +31,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--black);
+      background: linear-gradient(135deg, #0d0a1a 0%, #1a0a2e 50%, #0d0a1a 100%);
       color: var(--text);
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 16px;
@@ -189,7 +189,7 @@
     /* ── Mockup ── */
     .phone-mockup {
       margin: 60px auto 0;
-      max-width: 280px;
+      max-width: 700px;
       position: relative;
     }
 
@@ -625,7 +625,7 @@
       <h1>Your phone<br/>unlocks when<br/><em>you earn it.</em></h1>
 
       <p class="sub">
-        Do your reps. Unlock your phone. RepScreen uses Apple Family Controls to make screen time a reward for physical effort — push-ups, squats, planks, jumping jacks, or any custom exercise you create.
+        Do your reps. Unlock your phone. RepScreen uses your camera to count reps in real time — push-ups, squats, planks, jumping jacks, or any custom exercise. Hit your goal and your phone unlocks. Built on Apple Family Controls. No bypass, no exceptions.
       </p>
 
       <div class="cta-block">
@@ -633,19 +633,9 @@
         <p class="cta-note"><strong>Lifetime deal.</strong> Goes to $49.99 at launch.</p>
       </div>
 
-      <!-- Phone Mockup -->
+      <!-- Hero Mockup -->
       <div class="phone-mockup">
-        <div class="phone-frame">
-          <div class="phone-screen">
-            <div class="lock-icon">🔒</div>
-            <h3>Phone is locked</h3>
-            <div class="rep-counter"><span>8</span> / 20 reps</div>
-            <div class="progress-bar">
-              <div class="progress-fill"></div>
-            </div>
-            <p style="font-size:13px; color:var(--muted); text-align:center;">Complete your push-ups to unlock</p>
-          </div>
-        </div>
+        <img src="hero-mockup.jpg" alt="RepScreen app screens" style="width:100%; max-width:700px; border-radius:16px; display:block; margin:0 auto;" />
       </div>
     </div>
   </section>
